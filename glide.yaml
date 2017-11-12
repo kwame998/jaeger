@@ -13,11 +13,11 @@ import:
 - package: go.uber.org/zap
   version: ^1
 - package: github.com/uber/jaeger-client-go
-  version: ^2.7.0
+  version: normalize-metrics
   subpackages:
   - transport
 - package: github.com/uber/jaeger-lib
-  version: ^1.0.0
+  version: ^1.2.0
 - package: github.com/uber/tchannel-go
   version: v1.1.0
   subpackages:

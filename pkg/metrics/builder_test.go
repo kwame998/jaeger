@@ -91,7 +91,7 @@ func TestBuilder(t *testing.T) {
 		if testCase.handler {
 			require.NotNil(t, b.handler)
 			mux := http.NewServeMux()
-			b.RegisterHandler(mux)
+			b.RegisterHandler(mux.Handle)
 		}
 	}
 }

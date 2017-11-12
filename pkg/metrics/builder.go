@@ -21,11 +21,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/viper"
 	xkit "github.com/uber/jaeger-lib/metrics/go-kit"
 	kitexpvar "github.com/uber/jaeger-lib/metrics/go-kit/expvar"
-	kitprom "github.com/uber/jaeger-lib/metrics/go-kit/prometheus"
+	jprom "github.com/uber/jaeger-lib/metrics/prometheus"
 
 	"github.com/uber/jaeger-lib/metrics"
 )
@@ -60,9 +61,10 @@ func AddFlags(flags *flag.FlagSet) {
 }
 
 // InitFromViper initializes Builder with properties retrieved from Viper.
-func (b *Builder) InitFromViper(v *viper.Viper) {
+func (b *Builder) InitFromViper(v *viper.Viper) *Builder {
 	b.Backend = v.GetString(metricsBackend)
 	b.HTTPRoute = v.GetString(metricsHTTPRoute)
+	return b
 }
 
 // CreateMetricsFactory creates a metrics factory based on the configured type of the backend.
@@ -70,7 +72,8 @@ func (b *Builder) InitFromViper(v *viper.Viper) {
 // can be later added by RegisterHandler function.
 func (b *Builder) CreateMetricsFactory(namespace string) (metrics.Factory, error) {
 	if b.Backend == "prometheus" {
-		metricsFactory := xkit.Wrap(namespace, kitprom.NewFactory("", "", nil))
+		jprom.New(prometheus.DefaultRegisterer, nil)
+		metricsFactory := jprom.New(prometheus.DefaultRegisterer, nil)
 		b.handler = promhttp.Handler()
 		return metricsFactory, nil
 	}
@@ -86,8 +89,8 @@ func (b *Builder) CreateMetricsFactory(namespace string) (metrics.Factory, error
 }
 
 // RegisterHandler adds an endpoint to the mux if the metrics backend supports it.
-func (b *Builder) RegisterHandler(mux *http.ServeMux) {
+func (b *Builder) RegisterHandler(mux func(pattern string, handler http.Handler)) {
 	if b.handler != nil && b.HTTPRoute != "" {
-		mux.Handle(b.HTTPRoute, b.handler)
+		mux(b.HTTPRoute, b.handler)
 	}
 }

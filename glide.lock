@@ -1,5 +1,5 @@
-hash: 186c8ac164ff232e786b5be66349990e0a87c188de41b193fc6a279d413c0a71
-updated: 2017-10-17T15:33:35.040726046-04:00
+hash: 55e2ad9a0963e9f16c211e63da6355ba0c9c717b6b348a56570c3274025ebd4a
+updated: 2017-11-12T17:50:41.924849831-05:00
 imports:
 - name: github.com/apache/thrift
   version: 53dd39833a08ce33582e5ff31fa18bb4735d6731
@@ -29,7 +29,6 @@ imports:
   - metrics/expvar
   - metrics/generic
   - metrics/internal/lv
-  - metrics/prometheus
 - name: github.com/gocql/gocql
   version: 4d2d1ac71932f7c4a6c7feb0d654462e4116c58b
   subpackages:
@@ -138,13 +137,16 @@ imports:
 - name: github.com/uber-go/atomic
   version: 0c9e689d64f004564b79d9a663634756df322902
 - name: github.com/uber/jaeger-client-go
-  version: 3e3870040def0ebdaf65a003863fa64f5cb26139
+  version: b61406cee1f67bd5306bd0965ee7740711c65a73
   subpackages:
   - config
+  - internal/baggage
+  - internal/baggage/remote
   - internal/spanlog
   - log
   - rpcmetrics
   - thrift-gen/agent
+  - thrift-gen/baggage
   - thrift-gen/jaeger
   - thrift-gen/sampling
   - thrift-gen/zipkincore
@@ -152,12 +154,12 @@ imports:
   - transport/zipkin
   - utils
 - name: github.com/uber/jaeger-lib
-  version: 3b2a9ad2a045881ab7a0f81d465be54c8292ee4f
+  version: 87d428f53f98801dc0e418fe5aa7d68c4abedd9d
   subpackages:
   - metrics
   - metrics/go-kit
   - metrics/go-kit/expvar
-  - metrics/go-kit/prometheus
+  - metrics/prometheus
   - metrics/testutils
 - name: github.com/uber/tchannel-go
   version: 1a0e35378f6f721bc07f6c4466bc9701ed70b506
