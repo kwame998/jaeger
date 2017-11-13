@@ -18,7 +18,6 @@ import (
 	"errors"
 	"expvar"
 	"flag"
-	"fmt"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -52,8 +51,7 @@ func AddFlags(flags *flag.FlagSet) {
 	flags.String(
 		metricsBackend,
 		defaultMetricsBackend,
-		fmt.Sprintf("Defines which metrics backend to use for metrics reporting: %s, prometheus, none",
-			defaultMetricsBackend))
+		"Defines which metrics backend to use for metrics reporting: expvar, prometheus, none")
 	flags.String(
 		metricsHTTPRoute,
 		defaultMetricsRoute,
@@ -88,9 +86,7 @@ func (b *Builder) CreateMetricsFactory(namespace string) (metrics.Factory, error
 	return nil, errUnknownBackend
 }
 
-// RegisterHandler adds an endpoint to the mux if the metrics backend supports it.
-func (b *Builder) RegisterHandler(mux func(pattern string, handler http.Handler)) {
-	if b.handler != nil && b.HTTPRoute != "" {
-		mux(b.HTTPRoute, b.handler)
-	}
+// Handler returns an http.Handler for the metrics endpoint.
+func (b *Builder) Handler() http.Handler {
+	return b.handler
 }

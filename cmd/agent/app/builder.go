@@ -155,7 +155,7 @@ func (b *Builder) CreateAgent(logger *zap.Logger) (*Agent, error) {
 	}
 	httpServer := b.HTTPServer.GetHTTPServer(b.CollectorServiceName, mainReporter.Channel(), mFactory)
 	if b.metricsFactory == nil {
-		b.Metrics.RegisterHandler(httpServer.Handler.(*http.ServeMux).Handle)
+		httpServer.Handler.(*http.ServeMux).Handle(b.Metrics.HTTPRoute, b.Metrics.Handler())
 	}
 	return NewAgent(processors, httpServer, logger), nil
 }

@@ -233,10 +233,11 @@ func startQuery(
 	r := mux.NewRouter()
 	apiHandler.RegisterRoutes(r)
 	registerStaticHandler(r, logger, qOpts)
-	metricsBuilder.RegisterHandler(func(pattern string, handler http.Handler) {
+
+	if h := metricsBuilder.Handler(); h != nil {
 		logger.Info("Registering metrics handler with jaeger-query HTTP server", zap.String("route", metricsBuilder.HTTPRoute))
-		r.Handle(pattern, handler)
-	})
+		r.Handle(metricsBuilder.HTTPRoute, h)
+	}
 
 	portStr := ":" + strconv.Itoa(qOpts.Port)
 	recoveryHandler := recoveryhandler.NewRecoveryHandler(logger, true)
