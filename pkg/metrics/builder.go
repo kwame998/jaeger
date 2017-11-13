@@ -34,8 +34,8 @@ import (
 const (
 	metricsBackend        = "metrics-backend"
 	metricsHTTPRoute      = "metrics-http-route"
-	defaultMetricsBackend = "expvar"
-	defaultMetricsRoute   = "/debug/vars"
+	defaultMetricsBackend = "prometheus"
+	defaultMetricsRoute   = "/metrics"
 )
 
 var errUnknownBackend = errors.New("unknown metrics backend specified")
